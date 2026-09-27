@@ -10,7 +10,6 @@ import { ServiceCard } from '@/components/service-card';
 import { BookingModal } from '@/components/booking-modal';
 import { InstantWorkModal } from '@/components/instant-work-modal';
 import { BookingsList } from '@/components/bookings-list';
-import { AuthModal } from '@/components/auth-modal';
 import { useAuth } from '@/lib/auth-context';
 import type { Service, ServiceCategory, Provider, Booking, InstantRequest } from '@/lib/types';
 import { getCategories, getAllServices, getProvidersForService } from '@/lib/data';
@@ -22,7 +21,7 @@ function getIcon(name: string): LucideIcon {
 }
 
 export default function Home() {
-  const { user, setPendingAction, setShowAuthModal } = useAuth();
+  const { user, pendingAction, setPendingAction, setShowAuthModal } = useAuth();
   const [location, setLocation] = useState<UserLocation | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
@@ -92,10 +91,15 @@ export default function Home() {
 
   // After auth, resume pending action
   useEffect(() => {
-    if (user) {
-      // pendingAction will be handled by the component when user becomes available
+    if (user && pendingAction) {
+      if (pendingAction.type === 'booking') {
+        setBookingService(pendingAction.data as Service);
+      } else if (pendingAction.type === 'instant') {
+        setInstantService(pendingAction.data as Service);
+      }
+      setPendingAction(null);
     }
-  }, [user]);
+  }, [user, pendingAction, setPendingAction]);
 
   const stats = [
     { label: 'Verified Providers', value: '10+' },
@@ -330,7 +334,6 @@ export default function Home() {
         onClose={() => setInstantService(null)}
         onAccepted={handleInstantAccepted}
       />
-      <AuthModal />
     </div>
   );
 }
