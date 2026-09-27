@@ -1,8 +1,11 @@
 'use client';
 
 import { createContext, useContext, useState, useEffect, useCallback, type ReactNode } from 'react';
-import { supabase } from '@/lib/supabase';
-import type { User } from '@supabase/supabase-js';
+import {
+  onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword,
+  signOut as firebaseSignOut, type User as FirebaseUser,
+} from 'firebase/auth';
+import { auth } from './firebase';
 
 interface PendingAction {
   type: 'booking' | 'instant';
@@ -10,7 +13,7 @@ interface PendingAction {
 }
 
 interface AuthContextValue {
-  user: User | null;
+  user: FirebaseUser | null;
   loading: boolean;
   pendingAction: PendingAction | null;
   signIn: (email: string, password: string) => Promise<{ error: string | null }>;
@@ -24,51 +27,48 @@ interface AuthContextValue {
 const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<FirebaseUser | null>(null);
   const [loading, setLoading] = useState(true);
   const [pendingAction, setPendingAction] = useState<PendingAction | null>(null);
   const [showAuthModal, setShowAuthModal] = useState(false);
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setUser(session?.user || null);
+    const unsub = onAuthStateChanged(auth, (u) => {
+      setUser(u);
       setLoading(false);
     });
-
-    const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user || null);
-    });
-
-    return () => listener.subscription.unsubscribe();
+    return () => unsub();
   }, []);
 
   const signIn = useCallback(async (email: string, password: string) => {
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
-    return { error: error?.message || null };
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+      return { error: null };
+    } catch (err) {
+      return { error: err instanceof Error ? err.message : 'Sign in failed' };
+    }
   }, []);
 
   const signUp = useCallback(async (email: string, password: string) => {
-    const { error } = await supabase.auth.signUp({ email, password });
-    return { error: error?.message || null };
+    try {
+      await createUserWithEmailAndPassword(auth, email, password);
+      return { error: null };
+    } catch (err) {
+      return { error: err instanceof Error ? err.message : 'Sign up failed' };
+    }
   }, []);
 
   const signOut = useCallback(async () => {
-    await supabase.auth.signOut();
+    await firebaseSignOut(auth);
     setUser(null);
   }, []);
 
   return (
     <AuthContext.Provider
       value={{
-        user,
-        loading,
-        pendingAction,
-        setPendingAction,
-        signIn,
-        signUp,
-        signOut,
-        showAuthModal,
-        setShowAuthModal,
+        user, loading, pendingAction,
+        signIn, signUp, signOut,
+        setPendingAction, showAuthModal, setShowAuthModal,
       }}
     >
       {children}

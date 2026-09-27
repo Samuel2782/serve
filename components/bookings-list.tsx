@@ -33,11 +33,12 @@ export function BookingsList({ refreshTrigger }: BookingsListProps) {
   const loadBookings = async () => {
     setLoading(true);
     try {
-      const { supabase } = await import('@/lib/supabase');
-      const { data } = await supabase.from('bookings')
-        .select('*, provider:providers(*), service:services(*)')
-        .order('created_at', { ascending: false }).limit(20);
-      setBookings(data || []);
+      const { collection, getDocs, query, orderBy, limit } = await import('firebase/firestore');
+      const { db } = await import('@/lib/firebase');
+      const q = query(collection(db, 'bookings'), orderBy('created_at', 'desc'), limit(20));
+      const snap = await getDocs(q);
+      const items = snap.docs.map((d) => ({ id: d.id, ...d.data() } as Booking));
+      setBookings(items);
     } catch { setBookings([]); }
     setLoading(false);
   };

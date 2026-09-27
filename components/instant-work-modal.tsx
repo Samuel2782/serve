@@ -62,10 +62,8 @@ export function InstantWorkModal({ service, userLocation, onClose, onAccepted }:
 
   const pollRequest = async (id: string): Promise<InstantRequest | null> => {
     try {
-      const { supabase } = await import('@/lib/supabase');
-      const { data } = await supabase.from('instant_requests')
-        .select('*, service:services(*), provider:providers(*)').eq('id', id).maybeSingle();
-      return data;
+      const { getInstantRequestById } = await import('@/lib/data');
+      return await getInstantRequestById(id);
     } catch { return null; }
   };
 
