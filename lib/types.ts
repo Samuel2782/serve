@@ -10,6 +10,7 @@ export interface ServiceCategory {
   icon: string;
   description: string | null;
   display_order: number;
+  image_url: string | null;
   created_at: string;
 }
 

@@ -1,6 +1,6 @@
 'use client';
 
-import { MapPin, Search, Navigation, Crosshair } from 'lucide-react';
+import { MapPin, Search, Crosshair } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 
@@ -79,28 +79,28 @@ export function LocationBar({ location, onLocationChange, searchQuery, onSearchC
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
         <input
           type="text"
-          placeholder="Search for services..."
+          placeholder="Search services..."
           value={searchQuery}
           onChange={(e) => onSearchChange(e.target.value)}
-          className="w-full h-11 pl-10 pr-4 rounded-lg border border-border bg-card text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition-all"
+          className="w-full h-11 pl-10 pr-4 rounded-lg border border-border bg-background text-sm focus:outline-none focus:border-foreground/30 transition-all"
         />
       </div>
       <div className="relative">
         <button
           onClick={() => setShowDropdown(!showDropdown)}
-          className="flex items-center gap-2 h-11 px-4 rounded-lg border border-border bg-card text-sm font-medium hover:bg-muted transition-colors w-full sm:w-auto"
+          className="flex items-center gap-2 h-11 px-4 rounded-lg border border-border bg-background text-sm font-medium hover:bg-secondary transition-colors w-full sm:w-auto"
         >
-          <MapPin className="h-4 w-4 text-primary" />
+          <MapPin className="h-4 w-4" />
           <span className="truncate">{location ? location.locality : 'Select area'}</span>
         </button>
         {showDropdown && (
           <>
             <div className="fixed inset-0 z-40" onClick={() => setShowDropdown(false)} />
-            <div className="absolute right-0 mt-2 w-56 rounded-lg border border-border bg-card shadow-lg z-50 overflow-hidden animate-slide-up">
+            <div className="absolute right-0 mt-2 w-56 rounded-lg border border-border bg-card shadow-lg z-50 overflow-hidden">
               <button
                 onClick={handleDetect}
                 disabled={detecting}
-                className="flex items-center gap-2 w-full px-4 py-2.5 text-sm font-medium text-primary hover:bg-primary/5 border-b border-border"
+                className="flex items-center gap-2 w-full px-4 py-2.5 text-sm font-medium hover:bg-secondary border-b border-border"
               >
                 <Crosshair className={cn('h-4 w-4', detecting && 'animate-spin')} />
                 {detecting ? 'Detecting...' : 'Use my location'}
@@ -112,9 +112,9 @@ export function LocationBar({ location, onLocationChange, searchQuery, onSearchC
                     onLocationChange({ lat: loc.lat, lng: loc.lng, locality: loc.name });
                     setShowDropdown(false);
                   }}
-                  className="flex items-center gap-2 w-full px-4 py-2.5 text-sm hover:bg-muted transition-colors text-left"
+                  className="flex items-center gap-2 w-full px-4 py-2.5 text-sm hover:bg-secondary transition-colors text-left"
                 >
-                  <Navigation className="h-3.5 w-3.5 text-muted-foreground" />
+                  <MapPin className="h-3.5 w-3.5 text-muted-foreground" />
                   {loc.name}
                 </button>
               ))}

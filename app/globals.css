@@ -4,65 +4,61 @@
 
 @layer base {
   :root {
-    --background: 210 20% 98%;
-    --foreground: 215 28% 17%;
+    --background: 0 0% 100%;
+    --foreground: 210 20% 12%;
     --card: 0 0% 100%;
-    --card-foreground: 215 28% 17%;
+    --card-foreground: 210 20% 12%;
     --popover: 0 0% 100%;
-    --popover-foreground: 215 28% 17%;
-    --primary: 199 89% 48%;
-    --primary-foreground: 0 0% 100%;
-    --secondary: 201 94% 86%;
-    --secondary-foreground: 215 28% 17%;
-    --muted: 210 16% 93%;
-    --muted-foreground: 215 16% 47%;
-    --accent: 173 80% 40%;
-    --accent-foreground: 0 0% 100%;
+    --popover-foreground: 210 20% 12%;
+    --primary: 210 20% 12%;
+    --primary-foreground: 0 0% 98%;
+    --secondary: 210 16% 96%;
+    --secondary-foreground: 210 20% 12%;
+    --muted: 210 16% 96%;
+    --muted-foreground: 210 12% 45%;
+    --accent: 210 20% 12%;
+    --accent-foreground: 0 0% 98%;
     --destructive: 0 72% 51%;
-    --destructive-foreground: 0 0% 100%;
-    --border: 214 20% 89%;
-    --input: 214 20% 89%;
-    --ring: 199 89% 48%;
-    --chart-1: 199 89% 48%;
-    --chart-2: 173 80% 40%;
-    --chart-3: 43 74% 66%;
-    --chart-4: 27 87% 67%;
-    --chart-5: 0 72% 51%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 210 16% 90%;
+    --input: 210 16% 90%;
+    --ring: 210 20% 12%;
+    --radius: 0.5rem;
     --success: 142 71% 45%;
     --success-foreground: 0 0% 100%;
     --warning: 38 92% 50%;
     --warning-foreground: 0 0% 100%;
-    --radius: 0.625rem;
+    --slate-bg: 210 20% 12%;
+    --slate-card: 210 18% 16%;
+    --slate-border: 210 12% 22%;
+    --slate-fg: 210 10% 88%;
+    --slate-muted: 210 10% 60%;
   }
   .dark {
-    --background: 215 28% 9%;
-    --foreground: 210 20% 98%;
-    --card: 215 28% 12%;
-    --card-foreground: 210 20% 98%;
-    --popover: 215 28% 12%;
-    --popover-foreground: 210 20% 98%;
-    --primary: 199 89% 52%;
-    --primary-foreground: 215 28% 9%;
-    --secondary: 215 28% 18%;
-    --secondary-foreground: 210 20% 98%;
-    --muted: 215 28% 16%;
-    --muted-foreground: 215 16% 65%;
-    --accent: 173 80% 42%;
-    --accent-foreground: 215 28% 9%;
+    --background: 210 20% 10%;
+    --foreground: 0 0% 98%;
+    --card: 210 18% 14%;
+    --card-foreground: 0 0% 98%;
+    --popover: 210 18% 14%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 0 0% 98%;
+    --primary-foreground: 210 20% 12%;
+    --secondary: 210 14% 18%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 210 14% 18%;
+    --muted-foreground: 210 10% 60%;
+    --accent: 0 0% 98%;
+    --accent-foreground: 210 20% 12%;
     --destructive: 0 72% 56%;
-    --destructive-foreground: 210 20% 98%;
-    --border: 215 28% 20%;
-    --input: 215 28% 20%;
-    --ring: 199 89% 52%;
-    --chart-1: 199 89% 52%;
-    --chart-2: 173 80% 42%;
-    --chart-3: 43 74% 66%;
-    --chart-4: 27 87% 67%;
-    --chart-5: 0 72% 56%;
-    --success: 142 71% 45%;
-    --success-foreground: 0 0% 100%;
-    --warning: 38 92% 50%;
-    --warning-foreground: 0 0% 100%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 210 12% 22%;
+    --input: 210 12% 22%;
+    --ring: 0 0% 98%;
+    --slate-bg: 210 20% 10%;
+    --slate-card: 210 18% 14%;
+    --slate-border: 210 12% 22%;
+    --slate-fg: 0 0% 98%;
+    --slate-muted: 210 10% 60%;
   }
 }
 
@@ -74,6 +70,10 @@
     @apply bg-background text-foreground;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    letter-spacing: -0.01em;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    letter-spacing: -0.03em;
   }
 }
 
@@ -88,26 +88,26 @@
     -ms-overflow-style: none;
     scrollbar-width: none;
   }
-  .animate-fade-in {
-    animation: fadeIn 0.4s ease-out;
+  .slate-section {
+    background-color: hsl(var(--slate-bg));
+    color: hsl(var(--slate-fg));
   }
-  .animate-slide-up {
-    animation: slideUp 0.3s ease-out;
+  .slate-card {
+    background-color: hsl(var(--slate-card));
+    border-color: hsl(var(--slate-border));
   }
-  .animate-pulse-ring {
-    animation: pulseRing 1.5s ease-out infinite;
+  .slate-border {
+    border-color: hsl(var(--slate-border));
   }
-  @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
+  .slate-muted {
+    color: hsl(var(--slate-muted));
   }
-  @keyframes slideUp {
-    from { transform: translateY(12px); opacity: 0; }
-    to { transform: translateY(0); opacity: 1; }
+  .editorial-tracking {
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
   }
-  @keyframes pulseRing {
-    0% { box-shadow: 0 0 0 0 hsl(var(--primary) / 0.4); }
-    70% { box-shadow: 0 0 0 12px hsl(var(--primary) / 0); }
-    100% { box-shadow: 0 0 0 0 hsl(var(--primary) / 0); }
+  .editorial-heading {
+    letter-spacing: -0.04em;
+    line-height: 1.05;
   }
 }
