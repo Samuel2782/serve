@@ -74,7 +74,7 @@ export async function getProvidersForService(
   if (!providerServices) return [];
   const providers = (providerServices
     .map((ps) => ps.provider)
-    .filter((p) => p !== null)) as Provider[];
+    .filter((p) => p !== null)) as unknown as Provider[];
   if (userLat !== undefined && userLng !== undefined) {
     return providers.filter((p) => {
       const dist = haversineDistance(userLat, userLng, p.latitude, p.longitude);
@@ -111,7 +111,7 @@ export async function getProviderServices(providerId: string): Promise<Service[]
     .eq('provider_id', providerId);
   if (error) throw error;
   if (!data) return [];
-  return (data.map((ps) => ps.service).filter((s) => s !== null)) as Service[];
+  return (data.map((ps) => ps.service).filter((s) => s !== null)) as unknown as Service[];
 }
 
 export async function getBookingsByProvider(providerId: string): Promise<Booking[]> {
@@ -178,7 +178,7 @@ export async function getCheckedInProviders(
   if (!providerServices) return [];
   return (providerServices
     .map((ps) => ps.provider)
-    .filter((p) => p !== null) as Provider[])
+    .filter((p) => p !== null) as unknown as Provider[])
     .filter((p) => p.is_checked_in && p.is_verified)
     .filter((p) => haversineDistance(userLat, userLng, p.latitude, p.longitude) <= radiusKm);
 }
